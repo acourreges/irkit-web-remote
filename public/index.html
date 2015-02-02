@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>IRKit Web Remote</title>
+
+    <!-- Bootstrap -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Theme -->
+    <link href="lib/bootstrap/css/spacelab.min.css" rel="stylesheet">
+    <!-- Custom rules -->
+    <link href="css/IRKitWebRemote.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+  </head>
+  <body role="document">
+    
+    <!-- Request queue indicator as nav bar  -->
+    <nav id="requestQueueIndicator" class="navbar navbar-fixed-top">
+      <div class="container">
+        <div id="requestQueue" class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+            <span class="sr-only">Progress</span>
+          </div>
+        </div>
+      </div>
+      
+      <div style="text-align: center;">
+      <!-- Number of request queued label-->
+      <span id="queueRequestLabel" class=""></span> &nbsp;&nbsp;&nbsp;
+      <!-- Empty queue button-->
+      <a class="btn btn-primary btn-xs" onclick="Scheduler.clearQueue();" style="opacity: 0.8;">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+      </a>
+      </div>
+    </nav>
+    
+    <div class="container" role="main" style="margin-top: 5px;">
+    
+    <div class="row">
+    
+    <div class="col-sm-6">
+    <!-- Air Conditioning -->
+    <!-- Tab headers -->
+    <ul id="livingACTab" class="nav nav-tabs" role="tablist"  style="margin-bottom: 5px;">
+      <li role="presentation" class="disabled"><a href="#"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> AC</a></li>
+      <li role="presentation" class="active"><a href="#livingACHeat" id="livingACHeat-tab" role="tab" data-toggle="tab" aria-controls="livingACHeat" aria-expanded="true"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> Heat</a></li>
+      <li role="presentation"><a href="#livingACCold" id="livingACCold-tab" role="tab" data-toggle="tab" aria-controls="#livingACCold" aria-expanded="true"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Cold</a></li>
+      <li role="presentation"><a href="#livingACWind" id="livingACWind-tab" role="tab" data-toggle="tab" aria-controls="#livingACWind" aria-expanded="true"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> Wind</a></li>
+    </ul>
+    
+    <!-- Tab contents -->
+    <div class="tab-content" style="margin-bottom: 5px;">
+    
+        <div role="tabpanel" class="tab-pane active" id="livingACHeat">
+          <div class="btn-group btn-group-justified btn-group-lg">
+             <a class="btn btn-warning" onclick="sendCmd('living', 'bigDaikinHeat21');"> <span class="glyphicon glyphicon-fire" aria-hidden="true"></span> 21°</a>
+             <a class="btn btn-default" onclick="sendCmd('living', 'bigDaikinHeatBlowHorizontalCenter');"> <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span> Center</a>
+             <a class="btn btn-default" onclick="sendCmd('living', 'bigDaikinHeatBlowUp');"> <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> Top</a>
+             <a class="btn btn-danger" onclick="sendCmd('living', 'bigDaikinHeatStop');"> <span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+           </div>
+        </div>
+        
+        <div role="tabpanel" class="tab-pane" id="livingACCold">
+           <div class="btn-group btn-group-justified btn-group-lg">
+             <a class="btn btn-info" onclick="sendCmd('living', 'bigDaikinCold27');"> <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> 27°</a>
+             <a class="btn btn-default" onclick="sendCmd('living', 'bigDaikinBlowDown');"> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Bottom</a>
+             <a class="btn btn-default" onclick="sendSeq('living', 'bigDaikinColdTimerWind60min');"> <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> <span class="glyphicon glyphicon-off" aria-hidden="true"></span> 1h</a>
+             <a class="btn btn-danger" onclick="sendCmd('living', 'bigDaikinHeatStop');"> <span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+           </div>
+        </div>
+        
+        <div role="tabpanel" class="tab-pane" id="livingACWind">
+           <div class="btn-group btn-group-justified btn-group-lg">
+             <a class="btn btn-success" onclick="sendCmd('living', 'bigDaikinWindOn');"> <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> Wind</a>
+             <a class="btn btn-default" onclick="sendCmd('living', 'bigDaikinWindTimer60min');"> <span class="glyphicon glyphicon-time" aria-hidden="true"></span> 1h</a>
+             <a class="btn btn-default" onclick="sendCmd('living', 'bigDaikingWindTimerCancel');"> <span class="glyphicon glyphicon-time" aria-hidden="true"></span> Cancel</a>
+             <a class="btn btn-danger" onclick="sendCmd('living', 'bigDaikinWindOff');"> <span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+           </div>
+        </div>
+      </div>
+    
+    <!-- Sound System --> 
+    <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 5px;">
+      <li role="presentation" class="disabled"><a href="#"><span class="glyphicon glyphicon-music" aria-hidden="true"></span> Sound System</a></li>
+    </ul>
+      
+      <div class="bs-component" style="margin-bottom: 5px;">
+       <div class="btn-group btn-group-justified btn-group-lg">
+         <a class="btn btn-default" onclick="sendCmd('living', 'soundSystemVolumeUp');"> <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> +</a>
+         <a class="btn btn-default" onclick="sendSeq('living', 'soundSystemVolumeUpBurst');"> <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> ++</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'soundSystemChannel');"> <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Input</a>
+         <a class="btn btn-danger" onclick="sendCmd('living', 'soundSystemOff');"> <span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+       </div>
+       
+       <div class="btn-group btn-group-justified btn-group-lg" style="margin-bottom: 5px;">
+         <a class="btn btn-default" onclick="sendCmd('living', 'soundSystemVolumeDown');"> <span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span> -</a>
+         <a class="btn btn-default" onclick="sendSeq('living', 'soundSystemVolumeDownBurst');"> <span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span> --</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'soundSystemExtStereo');"> <span class="glyphicon glyphicon-sound-stereo" aria-hidden="true"></span> 2.1</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'soundSystemSurround');"> <span class="glyphicon glyphicon-sound-5-1" aria-hidden="true"></span> 5.1</a>
+       </div>
+       
+       <div class="btn-group btn-group-justified">
+         <a class="btn btn-primary" onclick="sendSeq('living', 'soundSystemSwitchToTV');"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> TV</a>
+         <a class="btn btn-primary" onclick="sendCmd('living', 'soundSystemChannel');"> <span class="glyphicon glyphicon-film" aria-hidden="true"></span> XBMC</a>
+       </div>
+       
+     </div>
+
+	</div>
+	
+	<div class="col-sm-6">
+    <!-- TV -->
+     <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 5px;">
+      <li role="presentation" class="disabled"><a href="#"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> TV</a></li>
+     </ul>
+     
+     <div class="bs-component" style="margin-bottom: 5px;">
+       <div class="btn-group btn-group-justified btn-group-lg" style="margin-bottom: 5px;">
+         <a class="btn btn-primary" onclick="sendCmd('living', 'sharpTVSetInputTV');"> <span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> TV</a>
+         <a class="btn btn-primary" onclick="sendSeq('living', 'sharpTVSwitchToInput2');"> <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> HDMI</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVInputSelect');"> <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Input</a>
+         <a class="btn btn-danger" onclick="sendCmd('living', 'sharpTVOff');"> <span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+       </div>
+       <div class="btn-group btn-group-justified">
+         <a class="btn btn-default" onclick="sendCmd('living', 'buffaloHDMISwitchInput1');">PC</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'buffaloHDMISwitchInput2');">PS3</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'buffaloHDMISwitchInput3');">PS4</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVInputSize');"> <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span> Size</a>
+       </div>
+     </div>
+     
+     <div class="bs-component" style="margin-bottom: 5px;">
+       <div class="btn-group btn-group-justified btn-group-lg">
+         <a class="btn btn-success" onclick="sendCmd('living', 'sharpTVChannelNext');"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> CH +</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel1');">1</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel2');">2</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel3');">3</a>
+       </div>
+       <div class="btn-group btn-group-justified btn-group-lg">
+         <a class="btn btn-success" onclick="sendCmd('living', 'sharpTVChannelPrevious');"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> CH -</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel4');">4</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel5');">5</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel6');">6</a>
+       </div>
+       <div class="btn-group btn-group-justified btn-group-lg">
+         <a class="btn btn-warning" onclick="sendCmd('living', 'sharpTVVolumeUp');"><span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> Vol +</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel7');">7</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel8');">8</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel9');">9</a>
+       </div>
+       <div class="btn-group btn-group-justified btn-group-lg">
+         <a class="btn btn-warning" onclick="sendCmd('living', 'sharpTVVolumeDown');"><span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span> Vol -</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel10');">10</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel11');">11</a>
+         <a class="btn btn-default" onclick="sendCmd('living', 'sharpTVChannel12');">12</a>
+       </div>
+     </div>
+     
+     <div class="bs-component" style="margin-bottom: 5px;">
+       <div class="btn-group btn-group-justified">
+         <a class="btn"></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVArrowUp');"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></a>
+         <a class="btn"></a>
+         <a class="btn"></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVBack');"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVProgramInfo');"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
+       </div>
+       <div class="btn-group btn-group-justified">
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVArrowLeft');"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVOk');">OK</a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVArrowRight');"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+         <a class="btn"></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVHome');"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVTool');"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>
+       </div>
+       <div class="btn-group btn-group-justified">
+         <a class="btn"></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVArrowDown');"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+         <a class="btn"></a>
+         <a class="btn"></a>
+         <a class="btn"></a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharPTVVideoFilter');"><span class="glyphicon glyphicon-adjust" aria-hidden="true"></span></a>
+       </div>
+     </div>
+     
+     <div class="bs-component" style="margin-bottom: 5px;">
+       <div class="btn-group btn-group-justified">
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVSubtitles');"><span class="glyphicon glyphicon-subtitles" aria-hidden="true"></span> Sub</a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVAudioLanguage');"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Lang</a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVSplitScreen');"><span class="glyphicon glyphicon-sound-dolby" aria-hidden="true"></span> Split</a>
+         <a class="btn btn-default btn-sm" onclick="sendCmd('living', 'sharpTVSplitScreenSwitchAudio');"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Swap</a>
+       </div>
+     </div>
+     
+     </div>
+     
+     </div>
+      
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    
+    <script src="js/Config.js"></script>
+    <script src="js/Commands.js"></script>
+    <script src="js/Controller.js"></script>
+    <script src="js/Scheduler.js"></script>
+    
+    <script type="text/javascript">
+        //Auto-selects heat/cold tab for AC depending on the season
+        var today = new Date();
+        var month = today.getMonth() + 1;
+        var day = today.getDate();
+        var isWinter = (month >= 10 || month <= 5);
+        if (month == 10 && day < 15) isWinter = false;
+        if (month == 5 && day >= 15) isWinter = false;
+        tabToUse = isWinter? "#livingACHeat" : "#livingACCold";
+        $('#livingACTab a[href="' + tabToUse + '"]').tab('show')
+    </script>
+    
+  </body>
+</html>

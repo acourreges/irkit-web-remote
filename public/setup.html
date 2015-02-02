@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>IRKit Setup Guide</title>
+
+    <!-- Bootstrap -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Theme -->
+    <link href="lib/bootstrap/css/spacelab.min.css" rel="stylesheet">
+
+    <style>
+      body {
+        color: #333;
+      }
+      .page-header {
+        margin-top: 0px;
+      }
+    </style>
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+  </head>
+  <body role="document">
+    
+    <div class="container" role="main" style="margin-top: 5px;">
+    
+    <div class="page-header">
+      <h1>IRKit Setup Guide <small style="font-size: 40%;">by&nbsp;<a href="http://www.adriancourreges.com">A.&nbsp;Courrèges</a></small></h1>
+    </div>
+    
+    <div class="panel panel-info">
+      <div class="panel-body">
+      	<img src="img/irkit_clipart.png" style="float: right; width: 4em; margin-left: 1em;" />
+        This page is an interactive guide for initializing an <a href="http://getirkit.com/en/">IRKit device</a>. <br/>
+        It is 100% browser-based so it works on any platform: Android, iOS, Mac, Linux, Windows...
+        <br/><br/>
+        It will:<br/>
+        <ul>
+          <li>obtain an API key from the <code>getirkit.com</code> servers.</li>
+          <li>tell your IRKit device how to connect to your home wifi network.</li>
+        </ul>
+        
+        <p>
+         If you don't need cloud-control through <code>getirkit.com</code> servers, you can 
+         <a href="http://www.adriancourreges.com/blog/2015/02/01/customizing-irkit-firmware-led-and-offline-mode/">flash a custom firmware</a> and 
+         go directly to <a href="#step3">step&nbsp;3</a>.
+         </p>
+        <strong>
+	      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> You should follow this guide on a device whith wifi support, to be able to communicate with IRKit.
+	    </strong>
+      </div>
+    </div>
+    
+    
+    
+    <a name="step1"><h2><strong>1.</strong> Obtain an API key</h2></a>
+
+    <p>
+    If you already have an API key feel free to skip this step.
+    </p>
+    <p>
+    The API key is used to control your IRKit device from the cloud.</br>
+    Simply use the form below to receive an API key:
+    </p>
+    
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-signin" onsubmit="Setup.sendKeyByMail(); return false;">
+          <label for="inputEmail" class="sr-only">Email address</label>
+          <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+          <button type="submit" class="btn btn-default btn-block" style="margin-top: 10px;" >Email me the API key</button>
+        </form>
+        <div id="keyByEmailFeedback" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+    
+    <a name="step2"><h2><strong>2.</strong> Obtain a device key</h2></a>
+
+    <p>
+    Using the API key you received by email, you can obtain a special token for one IRKit device. 
+    </p>
+    
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-signin" onsubmit="Setup.sendClientKey(); return false;">
+          <label for="inputAPIKey" class="sr-only">API key you got in step 1</label>
+          <input type="text" id="inputAPIKey" class="form-control" placeholder="API key you got in step 1" required>
+          <button type="submit" class="btn btn-default btn-block" style="margin-top: 10px;" >Get a device key</button>
+        </form>
+        <div id="deviceKeyFeedback" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+    
+    <a name="step3"><h2 ><strong>3.</strong> Connect to the IRKit wifi network</h2></a>
+    
+    <p>
+    Plug your IRKit device (micro-USB connector). It will turn on and the LED should blink red to indicate the device is in setup-mode.
+    </p>
+    
+    <p>
+    While in setup mode, the device exposes its own wifi network, it is broadcasted with an SSID beginning with "IRKit" and secured with WPA2.<br/>
+    <strong>Connect to the IRKit wifi network</strong> with the device you use to read this guide. (Don't close this web-page! You need to follow the rest of the guide after you join the IRKit wifi.) 
+    </p>
+    
+        
+    <div class="alert alert-info" role="alert">
+      <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <strong>What is the device wifi password?</strong><br/>
+      It is written on a small piece of paper included in the IRKit box you received. <br/>
+      It is a series of 10 digits, the Japanese label reads パスワード.<br/><br/>
+      
+      Note: if you flashed a custom firmware on your IRKit device, the password will be "XXXXXXXXXX".
+    </div>
+    
+    Once you're connected to the IRKit wifi, go back to your web-browser and proceed to the next step.
+    
+    <a name="step4"><h2><strong>4.</strong> Tell IRKit to join your home wifi network</h2></a>
+    
+    <div class="alert alert-warning" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 
+      You need to be connected to the <strong>IRKit's wifi network</strong> (explained in <a href="#step3">step&nbsp;3</a>), not your home network, for this step to succeed.
+    </div>
+    
+    <p>
+    Fill the following form with your wifi network name (SSID), the password and the security algorithm it uses.
+    </p>
+    <p>
+    The device key should have been already filled for you when you did <a href="#step2">step&nbsp;2</a>. Note that if you're using a custom firmware 
+    with cloud-feature turned off you can leave the key field empty.
+    </p>
+    
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-signin" onsubmit="Setup.sendWifiConfiguration(); return false;">
+          <label for="inputSSID" class="sr-only">Your home wifi network name (SSID)</label>
+          <input type="text" id="inputSSID" class="form-control" placeholder="Your home wifi network name (SSID)" required>
+          
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+          
+           <select id="inputSecurity" class="form-control">
+              <option value="0">WPA / WPA2 Encryption</option>
+              <option value="1">WEP Encryption</option>
+              <option value="2">Open</option>
+          </select> 
+          
+          <label for="inputDeviceKey" class="sr-only">API key (obtained in step 1)</label>
+          <input type="text" id="inputDeviceKey" class="form-control" placeholder="Device key (obtained in step 2)">
+          
+          <button type="submit" class="btn btn-default btn-block" style="margin-top: 10px;" >Send to IRKit</button>
+        </form>
+        <div id="sendWifiConfigFeedback" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+    
+    <a name="step5"><h2><strong>5.</strong> All set!</h2></a>
+    
+    <p>
+    Your IRKit device now knows about your home wifi network. <br/> It will disable its own "IRKit" wifi network and connect 
+    to yours. The LED flashing green means the device is connecting to your wifi, finally it turns blue when the connection 
+    is established.
+    </p>
+    <p>
+    Congratulations! Your IRKit is now ready to accept commands. 
+    </p>
+    
+    <br/>
+    <hr/>
+    
+    <a name="bonus_feature"><h2>Bonus features</h2></a>
+    
+    You can try these once your device is set-up. 
+    
+    <a name="read_ir"><h4>Read an IR signal</h4></a>
+
+    <p>
+    You can ask your IRKit to read an IR command. <br/>
+    Point a remote control to IRKit and press a button, IRKit should blink blue
+    to indicate it picked-up the signal. <br/>
+    Then use the form below to retrieve the signal data.
+    </p>
+    
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-signin" onsubmit="Setup.readIRSignal(); return false;">
+          <label for="inputDeviceIPRead" class="sr-only">IP address of the IRKit</label>
+          <input type="text" id="inputDeviceIPRead" class="form-control" placeholder="IP address of the IRKit" required>
+          <button type="submit" class="btn btn-default btn-block" style="margin-top: 10px;" >Retrieve IR data</button>
+        </form>
+        <div id="readIRFeedback" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+    
+    <a name="read_ir"><h4>Make IRKit send an IR signal</h4></a>
+
+    <p>
+    You can replay any signal you retrieved. <br/>
+    Simply copy-paste the data you got when using the form above into the field below.
+    </p>
+    
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="form-signin" onsubmit="Setup.sendIRSignal(); return false;">
+          <label for="inputDeviceIPSend" class="sr-only">IP address of the IRKit</label>
+          <input type="text" id="inputDeviceIPSend" class="form-control" placeholder="IP address of the IRKit" required>
+          <label for="jsonDataSend" class="sr-only">JSON Data</label>
+          <input type="text" id="jsonDataSend" class="form-control" placeholder="JSON Data" required>
+          <button type="submit" class="btn btn-default btn-block" style="margin-top: 10px;" >Send IR data</button>
+        </form>
+        <div id="sendIRFeedback" style="margin-top: 5px;"></div>
+      </div>
+    </div>
+    
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="lib/jquery/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    
+    <script src="lib/irkit/keyserializer.js"></script>
+    <script src="js/Setup.js"></script>
+    
+  </body>
+</html>
